@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Monitoring System - Home</title>
@@ -112,6 +113,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-left: 20px;
         }
 
         .btn-login:hover {
@@ -216,6 +218,12 @@
             flex-wrap: wrap;
             animation: fadeInUp 1s ease 0.4s both;
         }
+
+        .user-selection a{
+          text-decoration: none;
+          color: inherit; /* keeps original text color */
+}
+
 
         .user-card {
             background: white;
@@ -542,7 +550,7 @@
                 <a href="/logIn">
                     <button class="btn-login">Log In</button>
                 </a>
-                <button class="btn-signup">Sign Up</button>
+                
             </div>
         </div>
     </nav>
@@ -553,8 +561,10 @@
             <h1>Welcome to Student Monitoring System</h1>
             <p>Empower education with real-time tracking, comprehensive analytics, and seamless communication between teachers, students, and parents.</p>
             
+          
             <div class="user-selection">
-                <div class="user-card" onclick="alert('Student Portal - Coming Soon!')">
+              <a href="/student_signin">
+                <div class="user-card">
                     <div class="user-card-icon">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -564,8 +574,10 @@
                     <h3>I'm a Student</h3>
                     <p>Access your courses, grades, and assignments</p>
                 </div>
+              </a>
 
-                <div class="user-card" onclick="alert('Admin Portal - Coming Soon!')">
+              <a href="/admin_signin">
+                <div class="user-card">
                     <div class="user-card-icon">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
@@ -576,6 +588,7 @@
                     <h3>I'm an Admin</h3>
                     <p>Manage students, teachers, and monitor performance</p>
                 </div>
+              </a>
             </div>
         </div>
     </section>
