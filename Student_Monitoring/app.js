@@ -1,6 +1,6 @@
 const exp = require('express')
 const app = exp()
-const connect = require('./config/db_connect')
+//const connect = require('./config/db_connect')
 const Usermodel = require('./config/UserSchema')
 const Adminmodel = require('./config/AdminSchema')
 const path = require("path");
@@ -11,6 +11,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(exp.json())
 app.use(exp.urlencoded( {extended : true}))
 
+app.use(exp.static("public"));
+
 
 app.get("/", (req, res) => {
     res.render("landing");  
@@ -20,13 +22,79 @@ app.get('/login',(req,res)=>{
     res.render('login')
 })
 
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        //Check in USER model
+        const user = await Usermodel.findOne({ email: email, password: password });
+
+        if (user) {
+            return res.render('user'); 
+        }
+
+        // Check in ADMIN model
+        const admin = await Adminmodel.findOne({ email: email, password: password });
+
+        if (admin) {
+            console.log("Admin logged in:", admin.username);
+            return res.render('admin'); 
+        }
+
+        // 3️⃣ No match in both tables
+        return res.send("❌ Invalid email or password");
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Server error");
+    }
+});
+
+
 app.get('/student_signin',(req,res)=>{
     res.render('SignIn')
 })
 
+app.post('/student_signin', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        await Usermodel.create({
+            username,
+            email,
+            password
+        });
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error creating user");
+    }
+    res.render('User')
+});
+
+
 app.get('/admin_signin',(req,res)=>{
     res.render('SignIn')
 })
+
+app.post('/admin_signin', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        await Adminmodel.create({
+            username,
+            email,
+            password
+        });
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error creating user");
+    }
+    res.render('Admin')
+});
 
 app.post('/user',(req,res)=>{
     res.render('User')
