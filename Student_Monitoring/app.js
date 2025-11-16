@@ -1,6 +1,6 @@
 const exp = require('express')
 const app = exp()
-//const connect = require('./config/db_connect')
+const connect = require('./config/db_connect')
 const Usermodel = require('./config/UserSchema')
 const Adminmodel = require('./config/AdminSchema')
 const path = require("path");
@@ -42,58 +42,12 @@ app.post('/login', async (req, res) => {
         }
 
         // 3️⃣ No match in both tables
-        return res.send("❌ Invalid email or password");
+        return res.send("❌ User not found !!");
 
     } catch (err) {
         console.log(err);
         res.status(500).send("Server error");
     }
-});
-
-
-app.get('/student_signin',(req,res)=>{
-    res.render('SignIn')
-})
-
-app.post('/student_signin', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-
-        await Usermodel.create({
-            username,
-            email,
-            password
-        });
-
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error creating user");
-    }
-    res.render('User')
-});
-
-
-app.get('/admin_signin',(req,res)=>{
-    res.render('SignIn')
-})
-
-app.post('/admin_signin', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-
-        await Adminmodel.create({
-            username,
-            email,
-            password
-        });
-
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error creating user");
-    }
-    res.render('Admin')
 });
 
 app.post('/user',(req,res)=>{
