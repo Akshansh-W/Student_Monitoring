@@ -4,6 +4,8 @@ const connect = require('./config/db_connect')
 const Usermodel = require('./config/UserSchema')
 const Adminmodel = require('./config/AdminSchema')
 const path = require("path");
+const userRouter = require('./routes/user');
+const adminRouter = require('./routes/admin');
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -18,45 +20,12 @@ app.get("/", (req, res) => {
     res.render("landing");  
 });
 
-app.get('/login',(req,res)=>{
-    res.render('login')
-})
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
 
-    try {
-        //Check in USER model
-        const user = await Usermodel.findOne({ email: email, password: password });
+app.use('/user', userRouter);
 
-        if (user) {
-            return res.render('user'); 
-        }
+app.use('/admin', adminRouter);
 
-        // Check in ADMIN model
-        const admin = await Adminmodel.findOne({ email: email, password: password });
-
-        if (admin) {
-            console.log("Admin logged in:", admin.username);
-            return res.render('admin'); 
-        }
-
-        // 3️⃣ No match in both tables
-        return res.send("❌ User not found !!");
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server error");
-    }
-});
-
-app.post('/user',(req,res)=>{
-    res.render('User')
-})
-
-app.post('/admin',(req,res)=>{
-    res.render('Admin')
-})
 
 
 app.listen(3000,()=>{
